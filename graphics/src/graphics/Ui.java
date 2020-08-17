@@ -145,7 +145,7 @@ public class Ui {
 		xAxis.setCategorySeries(new String[] {"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"});
 		xAxis.enableCategory(true);
 		ITitle xAxisTitle = xAxis.getTitle();
-		xAxisTitle.setText("Wochentag");
+		xAxisTitle.setText("Wochentagggg");
 		xAxisTitle.setForeground(black);
 		IAxisTick xTick = xAxis.getTick();
 		xTick.setForeground(black);
