@@ -8,7 +8,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,8 +16,21 @@ import java.util.Locale;
 
 import enums.DayOfWeek;
 
-public class Parser {
+public class GraphicsController {
+	
+	private GraphicsView view;
+	double sum;
 
+	public GraphicsController(GraphicsView view) {
+		this.view = view;
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public HashMap<DayOfWeek, List<String>> parseInput() throws IOException, ParseException {
 		
 		HashMap<DayOfWeek, List<String>> map = new HashMap<>();
@@ -100,5 +112,29 @@ public class Parser {
 			}
 		}
 		return map;
+	}
+	
+	/**
+	 * 
+	 * @param dayToPriceList
+	 * @param day
+	 * @return the average for the given day
+	 */
+	public double getAverage(DayOfWeek day) {
+		HashMap<DayOfWeek, List<String>> dayToPriceList = view.getDayToPriceList();
+		if (!dayToPriceList.containsKey(day)) {
+			return 0;
+		}
+		
+		sum = 0;
+		
+		LinkedList<String> list = (LinkedList<String>) dayToPriceList.get(day);
+		
+		list.forEach(priceString -> {
+		double price = Double.parseDouble(priceString.substring(0, priceString.length()-1).replace(",", "."));
+		sum += price;
+		});
+		
+		return sum / list.size();
 	}
 }

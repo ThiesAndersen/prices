@@ -1,10 +1,6 @@
 package graphics;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -21,7 +17,7 @@ import java.util.regex.Pattern;
 
 public class Reader {
 
-	public static Path textFile = Paths.get("C:\\Users\\thies\\Desktop\\Tankstellenpreise.txt");
+	public static Path textFile = Paths.get("C:\\Users\\TA\\Desktop\\Tankstellenpreise.txt");
 	
 	private String urlString    = "https://ich-tanke.de/tankstellen/super-e5/umkreis/25337-elmshorn/";
 

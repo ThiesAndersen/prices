@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmi:id="_c3AF0MjYEeSyMNYR5xypkQ" elementId="org.eclipse.e4.application" bindingContexts="_c3AF2cjYEeSyMNYR5xypkQ">
   <children xsi:type="basic:TrimmedWindow" xmi:id="_c3AF0cjYEeSyMNYR5xypkQ" elementId="org.eclipse.e4.window.main" label="Graphics" iconURI="platform:/plugin/graphics/icons/Download.jpg" x="100" y="50" width="1700" height="900">
-    <children xsi:type="basic:Part" xmi:id="_tS2tEHgUEeqYfJK2Hxytng" elementId="graphics.part.0" contributionURI="bundleclass://graphics/graphics.Ui" iconURI="platform:/plugin/graphics/icons/open_in_app.png"/>
+    <children xsi:type="basic:Part" xmi:id="_tS2tEHgUEeqYfJK2Hxytng" elementId="graphics.part.0" contributionURI="bundleclass://graphics/graphics.GraphicsView" iconURI="platform:/plugin/graphics/icons/open_in_app.png"/>
   </children>
   <rootContext xmi:id="_c3AF2cjYEeSyMNYR5xypkQ" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="In Dialog and Windows">
     <children xmi:id="_c3AF2sjYEeSyMNYR5xypkQ" elementId="org.eclipse.ui.contexts.window" name="In Windows"/>

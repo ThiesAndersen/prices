@@ -6,7 +6,6 @@ package graphics;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -17,7 +16,6 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Button;
@@ -31,7 +29,6 @@ import org.eclipse.swtchart.IAxisTick;
 import org.eclipse.swtchart.IBarSeries;
 import org.eclipse.swtchart.IGrid;
 import org.eclipse.swtchart.ILegend;
-import org.eclipse.swtchart.ILineSeries;
 import org.eclipse.swtchart.ISeries.SeriesType;
 import org.eclipse.swtchart.ISeriesLabel;
 import org.eclipse.swtchart.ISeriesSet;
@@ -44,56 +41,56 @@ import enums.DayOfWeek;
  * @author thies
  *
  */
-public class Ui {
+public class GraphicsView {
 	
-	private Color blue = new Color(Display.getDefault(), 0, 0, 255);
-	private Color lightBlue = new Color(Display.getDefault(), 102, 194, 255);
-	private Color red = new Color(Display.getDefault(), 255, 0, 0);
-	private Color green = new Color(Display.getDefault(), 0, 255, 0);
-	private Color lightGreen = new Color(Display.getDefault(), 80, 240, 180);
-	private Color white = new Color(Display.getDefault(), 255, 255, 255);
-	private Color black = new Color(Display.getDefault(), 0, 0, 0);
-	private Color yellow = new Color(Display.getDefault(), 255, 204, 0);
-	private Color brown = new Color(Display.getDefault(), 102, 51, 0);
-	private Color pink = new Color(Display.getDefault(), 255, 128, 128);
-	private Color grey = new Color(Display.getDefault(), 234, 234, 225);
-	
-	Font tahoma_14 = new Font(Display.getDefault(), "Tahoma", 10, SWT.BOLD);
-	
+	private GraphicsController controller = new GraphicsController(this);
 	private HashMap<DayOfWeek, List<String>> dayToPriceList = new HashMap<>();
-	private double offsetPrice;
+
+	/**
+	 * Colors and fonts
+	 */
+	private Color blue 			= new Color(Display.getDefault(), 0, 0, 255);
+	private Color lightBlue 	= new Color(Display.getDefault(), 102, 194, 255);
+	private Color red 			= new Color(Display.getDefault(), 255, 0, 0);
+	private Color green 		= new Color(Display.getDefault(), 0, 255, 0);
+	private Color lightGreen	= new Color(Display.getDefault(), 80, 240, 180);
+	private Color white 		= new Color(Display.getDefault(), 255, 255, 255);
+	private Color black 		= new Color(Display.getDefault(), 0, 0, 0);
+	private Color yellow 		= new Color(Display.getDefault(), 255, 204, 0);
+	private Color brown 		= new Color(Display.getDefault(), 102, 51, 0);
+	private Color pink 			= new Color(Display.getDefault(), 255, 128, 128);
+	private Color grey 			= new Color(Display.getDefault(), 234, 234, 225);
+	private Font tahoma_14 		= new Font(Display.getDefault(), "Tahoma", 10, SWT.BOLD);
 	
 	@PostConstruct
 	public void createComposite(Composite parent, ESelectionService selectionService) {
 		
-		
 		parent.setLayout(GridLayoutFactory.fillDefaults().create());
-		Button button = new Button(parent, SWT.NONE);
-		button.setText("Daten einlesen");
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Reader reader = new Reader();
-				try {
-					reader.readWebsite();
-					System.out.println("Tankstellenpreise erfolgreich eingelesen und gespeichert");
-				} catch (IOException | ParseException exception) {
-					System.out.println("Webseite konnte nicht erfolgreich gelesen werden");
-					exception.printStackTrace();
-				}
-			}
-		});
+//		Button button = new Button(parent, SWT.NONE);
+//		button.setText("Daten einlesen");
+//		button.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				Reader reader = new Reader();
+//				try {
+//					reader.readWebsite();
+//					System.out.println("Tankstellenpreise erfolgreich eingelesen und gespeichert");
+//				} catch (IOException | ParseException exception) {
+//					System.out.println("Webseite konnte nicht erfolgreich gelesen werden");
+//					exception.printStackTrace();
+//				}
+//			}
+//		});
 		
-		Parser parser = new Parser();
 		try {
-			dayToPriceList = parser.parseInput();
+			dayToPriceList = controller.parseInput();
 		} catch (IOException | ParseException e1) {
 			System.out.println("Parser nicht erfolgreich");
 			e1.printStackTrace();
 		}
 		
-		Label testLabel = new Label(parent, SWT.NONE);
-		testLabel.setText("Hier kommen Filter hin =)");
+//		Label testLabel = new Label(parent, SWT.NONE);
+//		testLabel.setText("Hier kommen Filter hin =)");
 		
 		Chart chart = new Chart(parent, SWT.NONE);
 		chart.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
@@ -101,15 +98,18 @@ public class Ui {
 		graphTitle.setText("Benzinpreise");
 		graphTitle.setForeground(black);
 		
+//		double[] ySeries = { 
+//				controller.getAverage(DayOfWeek.MONDAY),
+//				controller.getAverage(DayOfWeek.TUESDAY),
+//				controller.getAverage(DayOfWeek.WEDNESDAY),
+//				controller.getAverage(DayOfWeek.THURSDAY),
+//				controller.getAverage(DayOfWeek.FRIDAY),
+//				controller.getAverage(DayOfWeek.SATURDAY),
+//				controller.getAverage(DayOfWeek.SUNDAY),
+//		};
 		
 		double[] ySeries = { 
-				getAverage(DayOfWeek.MONDAY),
-				getAverage(DayOfWeek.TUESDAY),
-				getAverage(DayOfWeek.WEDNESDAY),
-				getAverage(DayOfWeek.THURSDAY),
-				getAverage(DayOfWeek.FRIDAY),
-				getAverage(DayOfWeek.SATURDAY),
-				getAverage(DayOfWeek.SUNDAY),
+				1.00, 3.00, 6.00, 9.00, 2.00, 7.00, 6.00
 		};
 		
 		ISeriesSet seriesSet = chart.getSeriesSet();
@@ -145,7 +145,7 @@ public class Ui {
 		xAxis.setCategorySeries(new String[] {"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"});
 		xAxis.enableCategory(true);
 		ITitle xAxisTitle = xAxis.getTitle();
-		xAxisTitle.setText("Wochentagggg");
+		xAxisTitle.setText("Wochentag");
 		xAxisTitle.setForeground(black);
 		IAxisTick xTick = xAxis.getTick();
 		xTick.setForeground(black);
@@ -165,22 +165,11 @@ public class Ui {
 		xGrid.setStyle(LineStyle.SOLID);
 	}
 	
-	private double getAverage(DayOfWeek day) {
-		if (!dayToPriceList.containsKey(day)) {
-			return 0;
-		}
-		
-		offsetPrice = 0;
-		
-		LinkedList<String> list = (LinkedList<String>) dayToPriceList.get(day);
-		
-		list.forEach(priceString -> {
-		double price = Double.parseDouble(priceString.substring(0, priceString.length()-1).replace(",", "."));
-		offsetPrice += price;
-			
-		});
-		
-		return offsetPrice / list.size();
+	/**
+	 * 
+	 * @return dayToPriceList
+	 */
+	public HashMap<DayOfWeek, List<String>> getDayToPriceList() {
+		return dayToPriceList;
 	}
-	
 }
