@@ -36,6 +36,7 @@ import org.eclipse.swtchart.ITitle;
 import org.eclipse.swtchart.LineStyle;
 
 import enums.DayOfWeek;
+import tankerkönig.api.TankerkoenigController;
 
 /**
  * @author thies
@@ -66,28 +67,26 @@ public class GraphicsView {
 	public void createComposite(Composite parent, ESelectionService selectionService) {
 		
 		parent.setLayout(GridLayoutFactory.fillDefaults().create());
-//		Button button = new Button(parent, SWT.NONE);
-//		button.setText("Daten einlesen");
-//		button.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				Reader reader = new Reader();
-//				try {
-//					reader.readWebsite();
-//					System.out.println("Tankstellenpreise erfolgreich eingelesen und gespeichert");
-//				} catch (IOException | ParseException exception) {
-//					System.out.println("Webseite konnte nicht erfolgreich gelesen werden");
-//					exception.printStackTrace();
-//				}
-//			}
-//		});
+		Button button = new Button(parent, SWT.NONE);
+		button.setText("Daten einlesen");
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TankerkoenigController apiController = new TankerkoenigController();
+				try {
+					apiController.getPriceForID();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		
-		try {
-			dayToPriceList = controller.parseInput();
-		} catch (IOException | ParseException e1) {
-			System.out.println("Parser nicht erfolgreich");
-			e1.printStackTrace();
-		}
+//		try {
+//			dayToPriceList = controller.parseInput();
+//		} catch (IOException | ParseException e1) {
+//			System.out.println("Parser nicht erfolgreich");
+//			e1.printStackTrace();
+//		}
 		
 //		Label testLabel = new Label(parent, SWT.NONE);
 //		testLabel.setText("Hier kommen Filter hin =)");
@@ -95,7 +94,7 @@ public class GraphicsView {
 		Chart chart = new Chart(parent, SWT.NONE);
 		chart.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		ITitle graphTitle = chart.getTitle();
-		graphTitle.setText("Benzinpreise");
+		graphTitle.setText("Benzinpreis (Super)");
 		graphTitle.setForeground(black);
 		
 //		double[] ySeries = { 
