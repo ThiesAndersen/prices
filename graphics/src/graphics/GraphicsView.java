@@ -21,7 +21,6 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swtchart.Chart;
 import org.eclipse.swtchart.IAxis;
 import org.eclipse.swtchart.IAxisSet;
@@ -36,6 +35,7 @@ import org.eclipse.swtchart.ITitle;
 import org.eclipse.swtchart.LineStyle;
 
 import enums.DayOfWeek;
+import tankerkönig.api.TankerkoenigController;
 
 /**
  * @author thies
@@ -66,21 +66,16 @@ public class GraphicsView {
 	public void createComposite(Composite parent, ESelectionService selectionService) {
 		
 		parent.setLayout(GridLayoutFactory.fillDefaults().create());
-//		Button button = new Button(parent, SWT.NONE);
-//		button.setText("Daten einlesen");
-//		button.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				Reader reader = new Reader();
-//				try {
-//					reader.readWebsite();
-//					System.out.println("Tankstellenpreise erfolgreich eingelesen und gespeichert");
-//				} catch (IOException | ParseException exception) {
-//					System.out.println("Webseite konnte nicht erfolgreich gelesen werden");
-//					exception.printStackTrace();
-//				}
-//			}
-//		});
+		Button button = new Button(parent, SWT.NONE);
+		button.setText("Daten einlesen");
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				TankerkoenigController apiController = new TankerkoenigController();
+//				apiController.getPriceForID("edf12159-860f-4340-a5c9-ee0b92542894");
+				apiController.getStations();
+			}
+		});
 		
 		try {
 			dayToPriceList = controller.parseInput();
@@ -95,22 +90,22 @@ public class GraphicsView {
 		Chart chart = new Chart(parent, SWT.NONE);
 		chart.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		ITitle graphTitle = chart.getTitle();
-		graphTitle.setText("Benzinpreise");
+		graphTitle.setText("Benzinpreis (Super)");
 		graphTitle.setForeground(black);
 		
-//		double[] ySeries = { 
-//				controller.getAverage(DayOfWeek.MONDAY),
-//				controller.getAverage(DayOfWeek.TUESDAY),
-//				controller.getAverage(DayOfWeek.WEDNESDAY),
-//				controller.getAverage(DayOfWeek.THURSDAY),
-//				controller.getAverage(DayOfWeek.FRIDAY),
-//				controller.getAverage(DayOfWeek.SATURDAY),
-//				controller.getAverage(DayOfWeek.SUNDAY),
-//		};
-		
 		double[] ySeries = { 
-				1.00, 3.00, 6.00, 9.00, 2.00, 7.00, 6.00
+				controller.getAverage(DayOfWeek.MONDAY),
+				controller.getAverage(DayOfWeek.TUESDAY),
+				controller.getAverage(DayOfWeek.WEDNESDAY),
+				controller.getAverage(DayOfWeek.THURSDAY),
+				controller.getAverage(DayOfWeek.FRIDAY),
+				controller.getAverage(DayOfWeek.SATURDAY),
+				controller.getAverage(DayOfWeek.SUNDAY),
 		};
+		
+//		double[] ySeries = { 
+//				1.00, 3.00, 6.00, 9.00, 2.00, 7.00, 6.00
+//		};
 		
 		ISeriesSet seriesSet = chart.getSeriesSet();
 //		ISeries series = seriesSet.createSeries(SeriesType.LINE, "01 bis 06 Apr");
@@ -166,7 +161,6 @@ public class GraphicsView {
 	}
 	
 	/**
-	 * 
 	 * @return dayToPriceList
 	 */
 	public HashMap<DayOfWeek, List<String>> getDayToPriceList() {

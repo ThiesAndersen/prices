@@ -1,13 +1,13 @@
 package graphics;
 
+import static tankerkönig.api.Url.TEXT_FILE;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -15,11 +15,15 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This Reader is deprecated, do NOT use
+ * @author thies
+ * @deprecated
+ *
+ */
 public class Reader {
 
-	public static Path textFile = Paths.get("C:\\Users\\TA\\Desktop\\Tankstellenpreise.txt");
-	
-	private String urlString    = "https://ich-tanke.de/tankstellen/super-e5/umkreis/25337-elmshorn/";
+	private String urlString = "https://ich-tanke.de/tankstellen/super-e5/umkreis/25337-elmshorn/";
 
 	private String price;
 	private String name;
@@ -27,15 +31,15 @@ public class Reader {
 	private String plz;
 
 	public void readWebsite() throws IOException, ParseException {
-		if (!Files.exists(textFile)) {
-			Files.createFile(textFile);
+		if (!Files.exists(TEXT_FILE)) {
+			Files.createFile(TEXT_FILE);
 		}
 		Pattern patternPrice = Pattern.compile("Preisangabe in Euro\">(\\d+,\\d+)");
 		Pattern patternName = Pattern.compile("-Tankstelle anzeigen\">([a-zA-Z1-9][^#&<>\"~;$^%{}?]{1,100})");
 		Pattern patternStreet = Pattern.compile("</a></h4><p>([a-zA-Z1-9][^#&<>\"~;$^%{}?]{1,100})");
 		Pattern patternPLZ = Pattern.compile("([a-zA-Z1-9][^#&<>\"~;$^%{}?]{1,100})</a></p><p><span");
 		
-		ArrayList<String> lines = (ArrayList<String>) Files.readAllLines(textFile, StandardCharsets.UTF_8);
+		ArrayList<String> lines = (ArrayList<String>) Files.readAllLines(TEXT_FILE, StandardCharsets.UTF_8);
 		
 		String line = null;
 		String seperator = ";";
@@ -47,7 +51,7 @@ public class Reader {
 			inputStreamReader = new InputStreamReader(url.openStream(), "UTF8");
 		}
 		BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-		System.out.println("Write in file -> " + textFile);
+		System.out.println("Write in file -> " + TEXT_FILE);
 		
 		while ((line = bufferedReader.readLine()) != null) {
 			Matcher matcherPrice = patternPrice.matcher(line);
@@ -72,7 +76,7 @@ public class Reader {
 				
 			}
 		}
-		Files.write(textFile, lines, StandardCharsets.UTF_8, StandardOpenOption.WRITE);
+		Files.write(TEXT_FILE, lines, StandardCharsets.UTF_8, StandardOpenOption.WRITE);
 	}
 	
 	private void reset() {

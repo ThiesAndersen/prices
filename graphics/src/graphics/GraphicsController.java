@@ -1,5 +1,7 @@
 package graphics;
 
+import static tankerkönig.api.Url.TEXT_FILE;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -35,7 +37,7 @@ public class GraphicsController {
 		
 		HashMap<DayOfWeek, List<String>> map = new HashMap<>();
 		
-		ArrayList<String> lines = (ArrayList<String>) Files.readAllLines(Reader.textFile, StandardCharsets.UTF_8);
+		ArrayList<String> lines = (ArrayList<String>) Files.readAllLines(TEXT_FILE, StandardCharsets.UTF_8);
 		
 		// das da parser -> Tanklager Baack;1,08€;Kiebitzreiher Chaussee ;25358 Horst-Hahnenkamp;Thu Apr 23 14:19:46 CEST 2020
 		
