@@ -11,13 +11,13 @@ import com.google.gson.JsonObject;
  */
 public class PricesResponse {
 
-	private boolean ok;
+	private String ok;
 	private String status;
 	private String license;
 	private String data;
 	private JsonObject prices;
 	
-	public PricesResponse(boolean ok, String status, String license, String data, JsonObject prices) {
+	public PricesResponse(String ok, String status, String license, String data, JsonObject prices) {
 		this.ok = ok;
 		this.status = status;
 		this.license = license;
@@ -25,37 +25,21 @@ public class PricesResponse {
 		this.prices = prices;
 	}
 
-	/**
-	 * @return ok
-	 */
-	public boolean isOk() {
+	public String getok() {
 		return ok;
 	}
-	
-	/**
-	 * @return status
-	 */
 	public String getStatus() {
 		return status;
 	}
 
-	/**
-	 * @return license
-	 */
 	public String getLicense() {
 		return license;
 	}
 
-	/**
-	 * @return data
-	 */
 	public String getData() {
 		return data;
 	}
 	
-	/**
-	 * @return prices
-	 */
 	public JsonObject getprices() {
 		return prices;
 	}
