@@ -3,9 +3,9 @@
  */
 package tankerkönig.api;
 
-import static tankerkönig.api.Url.SINGLE_STATION;
-import static tankerkönig.api.Url.STATIONS_RADIUS;
-import static tankerkönig.api.Url.TEXT_FILE;
+import static tankerkönig.api.Constants.SINGLE_STATION;
+import static tankerkönig.api.Constants.STATIONS_RADIUS;
+import static tankerkönig.api.Constants.TEXT_FILE;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,20 +34,16 @@ public class TankerkoenigController {
 	private GsonBuilder gsonBuilder = new GsonBuilder();
 	private Gson gson  = gsonBuilder.create();
 	
-//	private String urlString = "https://creativecommons.tankerkoenig.de/json/prices.php?ids=edf12159-860f-4340-a5c9-ee0b92542894&apikey=84bcc00b-d130-c1f8-e104-3db891573e21";
-//	private String radiusElmshorn = "https://creativecommons.tankerkoenig.de/json/list.php?lat=53.7513549&lng=9.6632521&rad=1.5&sort=dist&type=e5&apikey=84bcc00b-d130-c1f8-e104-3db891573e21";
-	
 	/**
 	 * 
 	 */
 	public void getStations() {
 		String jsonText = getJsonTextFromUrl(STATIONS_RADIUS);
-		StationsResponse obj = gson.fromJson(jsonText, StationsResponse.class);
-//		ArrayList<String> lines = new ArrayList<>();
+		StationsResponse stationsResponse = gson.fromJson(jsonText, StationsResponse.class);
+		String seperator = ";";
 		try {
 			ArrayList<String> lines = (ArrayList<String>) Files.readAllLines(TEXT_FILE, StandardCharsets.UTF_8);
-			String seperator = ";";
-			for (JsonElement station : obj.getStations()) {
+			for (JsonElement station : stationsResponse.getStations()) {
 				JsonObject jsonObject = station.getAsJsonObject();
 				String id = jsonObject.get("id").getAsString();
 				String name = jsonObject.get("brand").getAsString();
@@ -58,11 +54,15 @@ public class TankerkoenigController {
 
 				String price = getPriceForID(id);
 				if (price == null) {
+					//EVTL Listen machen , damit es zusammen ist, für was ausgelesen werden konnte und für was nicht
+					System.out.println("Für folgende ID konnten keine Daten ausgelesen werden -> " + id);
 					continue;
 				}
 
 				lines.add(name + seperator + price + "€" + seperator + street + " " + houseNumber + seperator + postCode
 						+ " " + place + seperator + Calendar.getInstance().getTime() + seperator);
+				
+				System.out.println("Daten erfolgreich ausgelesen für ID -> " + id);
 			}
 			
 			Files.write(TEXT_FILE, lines, StandardCharsets.UTF_8, StandardOpenOption.WRITE);
@@ -71,7 +71,6 @@ public class TankerkoenigController {
 			e.printStackTrace();
 		}
 		
-		System.out.println("---Daten erfolgreich ausgelesen---");
 	}
 	
 	/**
@@ -80,12 +79,26 @@ public class TankerkoenigController {
 	 * @return the price with 2 digits
 	 */
 	public String getPriceForID(String id) {
-		String jsonText = getJsonTextFromUrl(Url.get(SINGLE_STATION, id));
+		String jsonText = getJsonTextFromUrl(Constants.get(SINGLE_STATION, id));
 		if (jsonText == null) {
 			return null;
 		}
+		
 		PricesResponse obj = gson.fromJson(jsonText, PricesResponse.class);
+		if (obj == null) {
+			return null;
+		}
+		
 		JsonElement station = obj.getprices().get(id);
+		if (station == null) {
+			return null;
+		}
+		
+		String status = station.getAsJsonObject().get("status").getAsString();
+		if (status.equals("closed")) {
+			return null;
+		}
+		
 		double superPrice = station.getAsJsonObject().get("e5").getAsDouble();
 		return String.format("%.2f", superPrice);
 	}
@@ -113,11 +126,4 @@ public class TankerkoenigController {
 		}
 		return stringBuilder.toString();
 	}
-	
-	
-	
-	
-	
-	
-	
 }

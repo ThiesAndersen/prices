@@ -1,6 +1,6 @@
 package graphics;
 
-import static tankerkönig.api.Url.TEXT_FILE;
+import static tankerkönig.api.Constants.TEXT_FILE;
 
 import java.io.BufferedReader;
 import java.io.IOException;

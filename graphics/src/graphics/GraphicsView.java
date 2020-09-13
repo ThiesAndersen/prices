@@ -84,9 +84,6 @@ public class GraphicsView {
 			e1.printStackTrace();
 		}
 		
-//		Label testLabel = new Label(parent, SWT.NONE);
-//		testLabel.setText("Hier kommen Filter hin =)");
-		
 		Chart chart = new Chart(parent, SWT.NONE);
 		chart.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 		ITitle graphTitle = chart.getTitle();

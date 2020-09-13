@@ -10,7 +10,7 @@ import java.nio.file.Paths;
  * @author thies
  *
  */
-public class Url {
+public class Constants {
 
 	public static final Path TEXT_FILE = Paths.get("C:\\Users\\thies\\Desktop\\Tankstellenpreise.txt");
 	
